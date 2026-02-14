@@ -1,7 +1,11 @@
 {
   "config_version": "router_v1.0.0",
   "trace_id": "trace_offline_0001",
-  "timestamp": "2026-02-14T12:41:18.277249+00:00",
-  "items_count": 2,
-  "items_hash": "cda2eda638b7a8ca4d85ac0bb031bba130b5caebe7f719ce85df25fbbe3e80a9"
+  "timestamp": "2026-02-14T12:45:05.186970+00:00",
+  "items_count": 3,
+  "items_hash": "c49b05b541e1fde6a89d491ef4abe1b106119f67e13435050cd9c8014021b242",
+  "policy": {
+    "label_confidence": 0.65,
+    "code_ratio_threshold": 0.3
+  }
 }
