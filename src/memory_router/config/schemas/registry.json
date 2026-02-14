@@ -1,0 +1,6 @@
+{
+  "registry_version": "1.0",
+  "schemas": [
+    {"schema_id": "block_classifier.v1", "path": "block_classifier.v1.json"}
+  ]
+}

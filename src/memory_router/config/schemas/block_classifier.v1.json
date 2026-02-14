@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "block_classifier.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_id","config_version","trace_id","labels"],
+  "properties": {
+    "schema_id": {"type":"string","const":"block_classifier.v1"},
+    "config_version": {"type":"string"},
+    "trace_id": {"type":"string"},
+    "labels": {
+      "type":"array","maxItems":4,
+      "items": {
+        "type":"object","additionalProperties":false,
+        "required":["name","confidence"],
+        "properties": {
+          "name": {"type":"string","enum":["conversation","preferences","code","other"]},
+          "confidence": {"type":"number","minimum":0.0,"maximum":1.0}
+        }
+      }
+    }
+  }
+}
