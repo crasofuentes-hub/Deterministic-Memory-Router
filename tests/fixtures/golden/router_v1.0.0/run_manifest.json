@@ -3,14 +3,14 @@
   "trace_id": "trace_offline_0001",
   "timestamp": "1970-01-01T00:00:00Z",
   "counts": {
-    "classifier_items": 3,
-    "mini_summaries": 3,
-    "global_ranked": 3
+    "classifier_items": 6,
+    "mini_summaries": 6,
+    "global_ranked": 6
   },
   "hashes": {
-    "classifier_items": "c49b05b541e1fde6a89d491ef4abe1b106119f67e13435050cd9c8014021b242",
-    "mini_summaries": "0fa9fd72173314a91a1dabea1d339fcca1b8609430a19498add4142b05d04684",
-    "global_ranked": "38ed4fc82c17b66e86948e8b3ff3eb92f4f40ca129b010b73e7e81164c7d4a40",
+    "classifier_items": "b40b430ffc7dcc6bad44de68492bc724a8755ac8ce23bda64af6cb788b14743d",
+    "mini_summaries": "65cb37c90786d58c94aac2909c42bc05ffbf28ab0586af6485daaab21abbd89a",
+    "global_ranked": "3d5351cc7df2c289c7ec8c98a83c20c3339aeffbe5c4b7a8b4d6746fc554ccf4",
     "fused_payload": "FUSER_FAILED"
   },
   "fuser": {

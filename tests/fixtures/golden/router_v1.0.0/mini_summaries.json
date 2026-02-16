@@ -3,30 +3,12 @@
     "schema_id": "mini_summary.v1.1",
     "config_version": "router_v1.0.0",
     "trace_id": "trace_offline_0001",
-    "agent": "preferences",
-    "stable_id": 1,
-    "source_block_ids": [
-      "b001"
-    ],
-    "summary": "U: prefiero Linux para dev. A: OK.",
-    "max_tokens": 40,
-    "scores": {
-      "match_query": 0.0,
-      "recency": 0.0,
-      "priority": 0.0,
-      "score_global": 0.0
-    }
-  },
-  {
-    "schema_id": "mini_summary.v1.1",
-    "config_version": "router_v1.0.0",
-    "trace_id": "trace_offline_0001",
     "agent": "code",
     "stable_id": 1,
     "source_block_ids": [
-      "b002"
+      "b005"
     ],
-    "summary": "U: here is some code: def x(): pass",
+    "summary": "Error observed: fts5 missing row from content table; repair required.",
     "max_tokens": 40,
     "scores": {
       "match_query": 0.0,
@@ -42,9 +24,81 @@
     "agent": "conversation",
     "stable_id": 1,
     "source_block_ids": [
+      "b001"
+    ],
+    "summary": "Reminder: pay electricity bill tomorrow at 9am.",
+    "max_tokens": 40,
+    "scores": {
+      "match_query": 0.0,
+      "recency": 0.0,
+      "priority": 0.0,
+      "score_global": 0.0
+    }
+  },
+  {
+    "schema_id": "mini_summary.v1.1",
+    "config_version": "router_v1.0.0",
+    "trace_id": "trace_offline_0001",
+    "agent": "conversation",
+    "stable_id": 2,
+    "source_block_ids": [
       "b002"
     ],
-    "summary": "A: ok",
+    "summary": "Project DMR: implement FTS5 cold store with repair path.",
+    "max_tokens": 40,
+    "scores": {
+      "match_query": 0.0,
+      "recency": 0.0,
+      "priority": 0.0,
+      "score_global": 0.0
+    }
+  },
+  {
+    "schema_id": "mini_summary.v1.1",
+    "config_version": "router_v1.0.0",
+    "trace_id": "trace_offline_0001",
+    "agent": "conversation",
+    "stable_id": 3,
+    "source_block_ids": [
+      "b003"
+    ],
+    "summary": "Buy: milk, eggs, coffee. Notes: use the discount coupon.",
+    "max_tokens": 40,
+    "scores": {
+      "match_query": 0.0,
+      "recency": 0.0,
+      "priority": 0.0,
+      "score_global": 0.0
+    }
+  },
+  {
+    "schema_id": "mini_summary.v1.1",
+    "config_version": "router_v1.0.0",
+    "trace_id": "trace_offline_0001",
+    "agent": "conversation",
+    "stable_id": 4,
+    "source_block_ids": [
+      "b004"
+    ],
+    "summary": "Meeting summary: decision log, risks, and next steps.",
+    "max_tokens": 40,
+    "scores": {
+      "match_query": 0.0,
+      "recency": 0.0,
+      "priority": 0.0,
+      "score_global": 0.0
+    }
+  },
+  {
+    "schema_id": "mini_summary.v1.1",
+    "config_version": "router_v1.0.0",
+    "trace_id": "trace_offline_0001",
+    "agent": "conversation",
+    "stable_id": 5,
+    "source_block_ids": [
+      "b006"
+    ],
+    "summary": "Personal: gym at 6pm, stretch, hydrate, sleep early.",
     "max_tokens": 40,
     "scores": {
       "match_query": 0.0,

@@ -5,8 +5,8 @@
     "trace_id": "trace_offline_0001",
     "labels": [
       {
-        "name": "preferences",
-        "confidence": 0.85
+        "name": "conversation",
+        "confidence": 1.0
       }
     ],
     "notes": "classifier_v1 split=full code_ratio=0.000"
@@ -21,7 +21,31 @@
         "confidence": 1.0
       }
     ],
-    "notes": "classifier_v1 split=non_code code_ratio=0.000"
+    "notes": "classifier_v1 split=full code_ratio=0.000"
+  },
+  {
+    "schema_id": "block_classifier.v1",
+    "config_version": "router_v1.0.0",
+    "trace_id": "trace_offline_0001",
+    "labels": [
+      {
+        "name": "conversation",
+        "confidence": 1.0
+      }
+    ],
+    "notes": "classifier_v1 split=full code_ratio=0.000"
+  },
+  {
+    "schema_id": "block_classifier.v1",
+    "config_version": "router_v1.0.0",
+    "trace_id": "trace_offline_0001",
+    "labels": [
+      {
+        "name": "conversation",
+        "confidence": 1.0
+      }
+    ],
+    "notes": "classifier_v1 split=full code_ratio=0.000"
   },
   {
     "schema_id": "block_classifier.v1",
@@ -33,6 +57,18 @@
         "confidence": 1.0
       }
     ],
-    "notes": "classifier_v1 split=code code_ratio=1.000"
+    "notes": "classifier_v1 split=full code_ratio=1.000"
+  },
+  {
+    "schema_id": "block_classifier.v1",
+    "config_version": "router_v1.0.0",
+    "trace_id": "trace_offline_0001",
+    "labels": [
+      {
+        "name": "conversation",
+        "confidence": 1.0
+      }
+    ],
+    "notes": "classifier_v1 split=full code_ratio=0.000"
   }
 ]
