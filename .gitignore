@@ -1,37 +1,19 @@
-# --- Python ---
-__pycache__/
-*.py[cod]
+﻿__pycache__/
+*.pyc
+*.pyo
 *.pyd
-*.so
-*.egg-info/
-dist/
-build/
-pip-wheel-metadata/
-.pytest_cache/
-.coverage
-htmlcov/
-.cache/
-
-# --- Virtualenv ---
 .venv/
 venv/
-
-# --- OS/Editor ---
+.env
+.pytest_cache/
+.coverage
+coverage.xml
+dist/
+build/
+*.egg-info/
 .DS_Store
-Thumbs.db
-.vscode/
-.idea/
-
-# --- Local outputs (do NOT commit) ---
-out/
-data/
-*.faiss
-*.jsonl
-
-# --- HuggingFace / Transformers cache (do NOT commit) ---
-.hf_cache/
-**/model.safetensors
-**/*.bin
-
-# --- Logs ---
-*.log
+dmr_cold.sqlite3
+dmr_faiss_hot/
+dmr_doctor_report.json
+dmr_doctor_report.md
+DMR_COMPLIANCE_CERT.md
