@@ -1,6 +1,6 @@
 from __future__ import annotations
 from dataclasses import dataclass
-from typing import Dict, List
+from typing import Dict, List, Iterable, Optional
 from ..models.memory_item import MemoryItem
 from ..models.retrieval import RetrievedItem
 from .similarity import tokenize, idf, tfidf_vec, cos_sim
@@ -67,13 +67,9 @@ def retrieve_topk(
 
 
 # =========================
-# Compatibility layer (M2/M3) — wrappers expected by batch.runner/router_scoring
+# Compatibility layer (M2/M3) â€” wrappers expected by batch.runner/router_scoring
 # These are deterministic and only depend on retrieve_topk + stable tie-break rules.
 # =========================
-
-from typing import Iterable, Optional
-
-
 def _stable_sort(items: list, key_fn):
     # Deterministic: Python sort is stable; we add explicit tie-break by stable_id if present.
     def k(x):
@@ -113,7 +109,7 @@ def retrieve_by_agent(
     # 1) Filter por agent preservando orden (determinista)
     filt = [mi for mi in memory_items if get_agent(mi) == agent]
 
-    # 2) Llama retrieve_topk sin asumir nombres exactos de parámetros
+    # 2) Llama retrieve_topk sin asumir nombres exactos de parÃ¡metros
     import inspect
 
     sig = inspect.signature(retrieve_topk)
@@ -134,7 +130,7 @@ def retrieve_by_agent(
         kwargs["now"] = int(now_unix)
         return retrieve_topk(filt, query, **kwargs)
 
-    # fallback: 3er posicional es now_unix (según tu traceback)
+    # fallback: 3er posicional es now_unix (segÃºn tu traceback)
     if kwargs:
         return retrieve_topk(filt, query, int(now_unix), **kwargs)
 
