@@ -67,7 +67,7 @@ def retrieve_topk(
 
 
 # =========================
-# Compatibility layer (M2/M3) â€” wrappers expected by batch.runner/router_scoring
+# Compatibility layer (M2/M3) Ã¢â‚¬â€ wrappers expected by batch.runner/router_scoring
 # These are deterministic and only depend on retrieve_topk + stable tie-break rules.
 # =========================
 def _stable_sort(items: list, key_fn):
@@ -109,7 +109,7 @@ def retrieve_by_agent(
     # 1) Filter por agent preservando orden (determinista)
     filt = [mi for mi in memory_items if get_agent(mi) == agent]
 
-    # 2) Llama retrieve_topk sin asumir nombres exactos de parÃ¡metros
+    # 2) Llama retrieve_topk sin asumir nombres exactos de parÃƒÂ¡metros
     import inspect
 
     sig = inspect.signature(retrieve_topk)
@@ -130,7 +130,7 @@ def retrieve_by_agent(
         kwargs["now"] = int(now_unix)
         return retrieve_topk(filt, query, **kwargs)
 
-    # fallback: 3er posicional es now_unix (segÃºn tu traceback)
+    # fallback: 3er posicional es now_unix (segÃƒÂºn tu traceback)
     if kwargs:
         return retrieve_topk(filt, query, int(now_unix), **kwargs)
 
