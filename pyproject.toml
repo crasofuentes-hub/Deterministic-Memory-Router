@@ -22,9 +22,11 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = [
-  "pytest>=8.0",
-  "ruff>=0.5"
+ci = [
+  "pytest>=8",
+  "ruff>=0.4",
+  "jsonschema>=4.21",
+  "sentence-transformers>=2.6",
 ]
 
 [project.scripts]
