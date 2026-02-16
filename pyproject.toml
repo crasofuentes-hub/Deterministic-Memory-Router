@@ -1,35 +1,37 @@
-﻿[build-system]
-requires = ["setuptools>=68", "wheel"]
+[build-system]
+requires = ["setuptools>=69", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "deterministic-memory-router"
-version = "2026.0.0"
-description = "Deterministic, offline memory layer for AI systems. No cloud. No randomness. No prompt saturation."
+name = "dmr"
+version = "2026.0.2"
+description = "Deterministic Memory Router (vFinal 2026): offline, deterministic, no prompt saturation."
 readme = "README.md"
-requires-python = ">=3.10"
-license = {text = "MIT"}
-authors = [{name = "Oscar Fuentes"}]
+requires-python = ">=3.11"
+license = { text = "Apache-2.0" }
+authors = [{ name = "Oscar Fuentes Fernandez" }]
 dependencies = [
   "fastapi>=0.110",
   "uvicorn>=0.27",
+  "pydantic>=2.6",
   "redis>=5.0",
-  "hiredis>=2.3",
   "numpy>=1.26",
   "prometheus-client>=0.20",
-  "pytest>=8.0",
-  "faiss-cpu>=1.7.4; platform_system != 'Darwin'",
+  "typing-extensions>=4.10",
+  "faiss-cpu>=1.8"
 ]
 
 [project.optional-dependencies]
 dev = [
-  "ruff>=0.6",
+  "pytest>=8.0",
+  "ruff>=0.5"
 ]
 
-[tool.pytest.ini_options]
-testpaths = ["tests"]
-addopts = "-q"
+[project.scripts]
+dmr = "dmr.cli.main:main"
 
-[tool.ruff]
-line-length = 88
-target-version = "py310"
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
