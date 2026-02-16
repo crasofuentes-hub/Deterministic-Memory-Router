@@ -1,4 +1,4 @@
-[build-system]
+﻿[build-system]
 requires = ["setuptools>=69", "wheel"]
 build-backend = "setuptools.build_meta"
 
@@ -26,7 +26,11 @@ ci = [
   "pytest>=8",
   "ruff>=0.4",
   "jsonschema>=4.21",
-  "sentence-transformers>=2.6",
+]
+
+
+embeddings = [
+  "sentence-transformers>=2.6"
 ]
 
 [project.scripts]
@@ -37,3 +41,4 @@ package-dir = {"" = "src"}
 
 [tool.setuptools.packages.find]
 where = ["src"]
+

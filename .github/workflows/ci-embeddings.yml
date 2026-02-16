@@ -1,42 +1,31 @@
-﻿name: CI
+﻿name: CI (embeddings)
 
 on:
-  push:
-    branches: ["main"]
-  pull_request:
-
-permissions:
-  contents: read
+  workflow_dispatch:
+  schedule:
+    - cron: "0 9 * * 1"  # Lunes 09:00 UTC (semanal)
 
 jobs:
-  test:
+  test-embeddings:
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        python-version: ["3.11"]
-
     steps:
       - uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: "3.11"
 
-      - name: Install
-        shell: bash
+      - name: Install (ci + embeddings)
         run: |
           python -m pip install --upgrade pip
-          python -m python -m pip install -e ".[ci]"
+          python -m pip install -e ".[ci,embeddings]"
 
       - name: Ruff
-        shell: bash
         run: |
           python -m ruff format --check .
           python -m ruff check .
 
       - name: Pytest
-        shell: bash
         run: |
           python -m pytest -q
