@@ -1,0 +1,28 @@
+name: Emotional-State-Tracker
+
+on:
+  push:
+    paths:
+      - "emotional-state-tracker/**"
+      - ".github/workflows/ci-emotional-state-tracker.yml"
+  pull_request:
+    paths:
+      - "emotional-state-tracker/**"
+      - ".github/workflows/ci-emotional-state-tracker.yml"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: emotional-state-tracker
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install --upgrade pip
+      - run: python -m pip install -e ".[ci]"
+      - run: python -m ruff check .
+      - run: python -m pytest
+      - run: python scripts/verify_state.py
