@@ -1,11 +1,12 @@
 from __future__ import annotations
 import pytest
-
-pytestmark = pytest.mark.embeddings
 from pathlib import Path
 import hashlib
 
 from memory_router.core import MultiAgentMemorySystem, Budgets, Thresholds
+
+
+pytestmark = pytest.mark.embeddings
 
 
 def _h(s: str) -> str:
