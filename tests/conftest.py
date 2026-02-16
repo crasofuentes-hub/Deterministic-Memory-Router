@@ -1,4 +1,4 @@
-﻿from __future__ import annotations
+from __future__ import annotations
 
 import importlib.util
 import pytest
@@ -15,11 +15,15 @@ def pytest_configure(config: pytest.Config) -> None:
     )
 
 
-def pytest_collection_modifyitems(config: pytest.Config, items: list[pytest.Item]) -> None:
+def pytest_collection_modifyitems(
+    config: pytest.Config, items: list[pytest.Item]
+) -> None:
     if _has_sentence_transformers():
         return
 
-    skip = pytest.mark.skip(reason="Falta 'sentence-transformers'. Instala: pip install -e '.[embeddings]'")
+    skip = pytest.mark.skip(
+        reason="Falta 'sentence-transformers'. Instala: pip install -e '.[embeddings]'"
+    )
     for item in items:
         if "embeddings" in item.keywords:
             item.add_marker(skip)

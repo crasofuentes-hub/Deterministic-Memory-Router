@@ -1,10 +1,11 @@
-﻿from __future__ import annotations
+from __future__ import annotations
 
 from dataclasses import asdict
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
+
 try:
     from sentence_transformers import SentenceTransformer  # type: ignore
 except Exception:  # pragma: no cover
@@ -79,9 +80,15 @@ class MultiAgentMemorySystem:
         self.thresholds = thresholds
 
         self.model = (
-            (lambda: (_ for _ in ()).throw(
-                RuntimeError("Embeddings requieren 'sentence-transformers'. Instala: pip install -e '.[embeddings]'")
-            ))() if SentenceTransformer is None else SentenceTransformer
+            (
+                lambda: (_ for _ in ()).throw(
+                    RuntimeError(
+                        "Embeddings requieren 'sentence-transformers'. Instala: pip install -e '.[embeddings]'"
+                    )
+                )
+            )()
+            if SentenceTransformer is None
+            else SentenceTransformer
         )(model_name)
         dim = int(self.model.get_sentence_embedding_dimension())
 
@@ -192,4 +199,3 @@ class MultiAgentMemorySystem:
             "fused_context": fused,
             "fused_tokens": _simple_token_count(fused),
         }
-

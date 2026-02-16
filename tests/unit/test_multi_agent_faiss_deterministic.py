@@ -1,5 +1,7 @@
 from __future__ import annotations
+import pytest
 
+pytestmark = pytest.mark.embeddings
 from pathlib import Path
 import hashlib
 
