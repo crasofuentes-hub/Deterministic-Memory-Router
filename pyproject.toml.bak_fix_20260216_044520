@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dmr"
+version = "2026.0.2"
+description = "Deterministic Memory Router (vFinal 2026): offline, deterministic, no prompt saturation."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "Apache-2.0" }
+authors = [{ name = "Oscar Fuentes Fernandez" }]
+dependencies = [
+  "fastapi>=0.110",
+  "uvicorn>=0.27",
+  "pydantic>=2.6",
+  "redis>=5.0",
+  "numpy>=1.26",
+  "prometheus-client>=0.20",
+  "typing-extensions>=4.10",
+  "faiss-cpu>=1.8"
+]
+
+[project.optional-dependencies]
+ci = [
+  "pytest>=8",
+  "ruff>=0.4",
+  "jsonschema>=4.21",
+  "sentence-transformers>=2.6",
+][project.scripts]
+dmr = "dmr.cli.main:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
