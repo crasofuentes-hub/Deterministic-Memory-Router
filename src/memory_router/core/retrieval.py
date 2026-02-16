@@ -62,7 +62,7 @@ def retrieve_topk(
 # These are deterministic and only depend on retrieve_topk + stable tie-break rules.
 # =========================
 
-from typing import Any, Iterable, Optional, Tuple
+from typing import Iterable, Optional
 
 def _stable_sort(items: list, key_fn):
     # Deterministic: Python sort is stable; we add explicit tie-break by stable_id if present.

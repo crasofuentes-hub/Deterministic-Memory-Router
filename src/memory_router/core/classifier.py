@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import re
 from dataclasses import dataclass
-from typing import List, Dict, Any, Tuple
+from typing import List, Dict
 
 CODE_TOKENS = (
     "def ", "class ", "import ", "from ", "try:", "except", "raise ", "return ",

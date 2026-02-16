@@ -1,7 +1,7 @@
 from __future__ import annotations
 import math
 import re
-from typing import Dict, List, Tuple
+from typing import Dict, List
 
 _WORD = re.compile(r"[A-Za-zÁÉÍÓÚÜÑáéíóúüñ0-9_]+")
 

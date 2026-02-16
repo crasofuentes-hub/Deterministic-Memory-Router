@@ -1,5 +1,6 @@
-from __future__ import annotations
-import re, hashlib
+﻿from __future__ import annotations
+import re
+import hashlib
 from dataclasses import dataclass
 from typing import Dict
 
@@ -34,8 +35,10 @@ class EmotionAnalyzer:
             for emo, lex in self.LEX.items():
                 if w in lex:
                     s = 1.0
-                    if i > 0 and words[i-1] in self.INTENS: s *= 1.5
-                    if i > 0 and words[i-1] in self.NEG: s *= 0.5
+if i > 0 and words[i - 1] in self.INTENS:
+    s *= 1.5
+if i > 0 and words[i - 1] in self.NEG:
+    s *= 0.5
                     scores[emo] += s
         for emo in scores:
             scores[emo] = min(round((scores[emo]/n)*10.0, 3), 1.0)
@@ -52,3 +55,4 @@ class EmotionAnalyzer:
         valence = round(pos/total, 3)
         sig = hashlib.sha256(str(sorted(scores.items())).encode("utf-8")).hexdigest()[:16]
         return EmotionResult(scores, dominant, scores[dominant], arousal, valence, sig)
+

@@ -1,6 +1,6 @@
 from __future__ import annotations
 from typing import Dict, Any, List, Set
-from ..utils.schema_validator import SchemaRegistry, validate_payload
+from ..utils.schema_validator import SchemaRegistry
 from .validator import validate_fuser_output
 
 def fuse(
