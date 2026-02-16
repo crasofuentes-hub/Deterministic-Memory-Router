@@ -32,7 +32,12 @@ def _to_jsonable(x: Any) -> Any:
 
     if isinstance(x, set):
         # orden determinista
-        return sorted([_to_jsonable(v) for v in x], key=lambda z: json.dumps(z, sort_keys=True, separators=(",", ":"), ensure_ascii=False))
+        return sorted(
+            [_to_jsonable(v) for v in x],
+            key=lambda z: json.dumps(
+                z, sort_keys=True, separators=(",", ":"), ensure_ascii=False
+            ),
+        )
 
     # objetos "simples" con atributos
     d = getattr(x, "__dict__", None)

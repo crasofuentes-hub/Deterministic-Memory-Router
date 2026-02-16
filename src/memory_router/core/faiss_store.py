@@ -9,6 +9,7 @@ import numpy as np
 
 import faiss  # type: ignore
 
+
 @dataclass(frozen=True)
 class MemoryChunk:
     stable_id: int
@@ -19,6 +20,7 @@ class MemoryChunk:
     ts_unix: int
     meta: Dict[str, Any]
 
+
 @dataclass(frozen=True)
 class Retrieved:
     stable_id: int
@@ -27,6 +29,7 @@ class Retrieved:
     text: str
     ts_unix: int
     meta: Dict[str, Any]
+
 
 class FaissShard:
     """

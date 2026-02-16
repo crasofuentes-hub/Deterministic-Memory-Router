@@ -5,8 +5,24 @@ from dataclasses import dataclass
 from typing import List, Dict
 
 CODE_TOKENS = (
-    "def ", "class ", "import ", "from ", "try:", "except", "raise ", "return ",
-    "{", "}", ";", "=>", "function ", "const ", "let ", "var ", "public ", "private ",
+    "def ",
+    "class ",
+    "import ",
+    "from ",
+    "try:",
+    "except",
+    "raise ",
+    "return ",
+    "{",
+    "}",
+    ";",
+    "=>",
+    "function ",
+    "const ",
+    "let ",
+    "var ",
+    "public ",
+    "private ",
 )
 
 PREF_PATTERNS = (
@@ -15,10 +31,12 @@ PREF_PATTERNS = (
     r"\b(ya no uso|a partir de ahora|dej[eé] de|solo uso|he cambiado a)\b",
 )
 
+
 @dataclass(frozen=True)
 class Label:
     name: str
     confidence: float
+
 
 @dataclass(frozen=True)
 class ClassifierResult:
@@ -28,6 +46,7 @@ class ClassifierResult:
     code_lines: List[str]
     non_code_lines: List[str]
     notes: str
+
 
 def _is_code_line(line: str) -> bool:
     s = line.strip()
@@ -40,13 +59,17 @@ def _is_code_line(line: str) -> bool:
             return True
     return False
 
+
 def _code_ratio(lines: List[str]) -> float:
     if not lines:
         return 0.0
     hits = sum(1 for ln in lines if _is_code_line(ln))
     return hits / max(1, len(lines))
 
-def classify_block(text_block: str, code_ratio_threshold: float = 0.30) -> ClassifierResult:
+
+def classify_block(
+    text_block: str, code_ratio_threshold: float = 0.30
+) -> ClassifierResult:
     lines = text_block.splitlines()
     cr = _code_ratio(lines)
 
@@ -87,7 +110,7 @@ def classify_block(text_block: str, code_ratio_threshold: float = 0.30) -> Class
     for lb in labels:
         seen[lb.name] = max(seen.get(lb.name, 0.0), lb.confidence)
     labels2 = []
-    for name in ("preferences","code","conversation","other"):
+    for name in ("preferences", "code", "conversation", "other"):
         if name in seen:
             labels2.append(Label(name, float(seen[name])))
 

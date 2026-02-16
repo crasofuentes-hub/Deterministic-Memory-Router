@@ -1,6 +1,7 @@
 from pathlib import Path
 from memory_router.batch.runner import run_offline
 
+
 def test_offline_runner_check_matches_golden():
     repo_root = Path(__file__).resolve().parents[2]
     corpus = repo_root / "tests" / "fixtures" / "corpus.jsonl"

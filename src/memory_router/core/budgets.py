@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
+
 @dataclass(frozen=True)
 class Budgets:
     # retrieval
@@ -9,6 +10,7 @@ class Budgets:
     # summarization
     max_agent_summary_tokens: int = 30
     max_recall_tokens: int = 200
+
 
 @dataclass(frozen=True)
 class Thresholds:

@@ -2,11 +2,13 @@ from __future__ import annotations
 from typing import Dict, Any, List
 from ..utils.schema_validator import SchemaRegistry, validate_payload
 
+
 def _cap_words(text: str, max_words: int) -> str:
     words = (text or "").split()
     if len(words) <= max_words:
         return " ".join(words).strip()
     return " ".join(words[:max_words]).strip()
+
 
 def make_mini_summary(
     *,

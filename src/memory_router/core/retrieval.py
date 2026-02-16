@@ -11,17 +11,22 @@ AGENT_PRIORITY = {
     "conversation": 0.7,
 }
 
+
 @dataclass(frozen=True)
 class ScoreWeights:
     alpha: float = 0.55  # match
-    beta: float  = 0.30  # recency
+    beta: float = 0.30  # recency
     gamma: float = 0.15  # priority
 
-def _norm_recency(ts_unix: int, now_unix: int, horizon_sec: int = 30 * 24 * 3600) -> float:
+
+def _norm_recency(
+    ts_unix: int, now_unix: int, horizon_sec: int = 30 * 24 * 3600
+) -> float:
     dt = max(0, now_unix - int(ts_unix))
     if dt >= horizon_sec:
         return 0.0
     return float(1.0 - (dt / float(horizon_sec)))
+
 
 def retrieve_topk(
     query: str,
@@ -43,26 +48,31 @@ def retrieve_topk(
         pri = float(agent_priority.get(it.agent, 0.5))
         sg = float(weights.alpha * match + weights.beta * rec + weights.gamma * pri)
 
-        scored.append(RetrievedItem(
-            agent=it.agent,
-            stable_id=it.stable_id,
-            text=it.text,
-            ts_unix=it.ts_unix,
-            match_query=float(match),
-            recency=float(rec),
-            priority=float(pri),
-            score_global=float(sg),
-            meta=dict(it.meta),
-        ))
+        scored.append(
+            RetrievedItem(
+                agent=it.agent,
+                stable_id=it.stable_id,
+                text=it.text,
+                ts_unix=it.ts_unix,
+                match_query=float(match),
+                recency=float(rec),
+                priority=float(pri),
+                score_global=float(sg),
+                meta=dict(it.meta),
+            )
+        )
 
     scored.sort(key=lambda r: (-r.score_global, -r.recency, -r.priority, r.stable_id))
     return scored[: max(0, int(topk))]
+
+
 # =========================
 # Compatibility layer (M2/M3) — wrappers expected by batch.runner/router_scoring
 # These are deterministic and only depend on retrieve_topk + stable tie-break rules.
 # =========================
 
 from typing import Iterable, Optional
+
 
 def _stable_sort(items: list, key_fn):
     # Deterministic: Python sort is stable; we add explicit tie-break by stable_id if present.
@@ -72,7 +82,9 @@ def _stable_sort(items: list, key_fn):
         if sid is None and isinstance(x, dict):
             sid = x.get("stable_id")
         return (kk, sid if sid is not None else 10**18)
+
     return sorted(items, key=k)
+
 
 def retrieve_by_agent(
     memory_items: list,
@@ -94,7 +106,9 @@ def retrieve_by_agent(
     """
 
     def get_agent(mi):
-        return getattr(mi, "agent", None) if not isinstance(mi, dict) else mi.get("agent")
+        return (
+            getattr(mi, "agent", None) if not isinstance(mi, dict) else mi.get("agent")
+        )
 
     # 1) Filter por agent preservando orden (determinista)
     filt = [mi for mi in memory_items if get_agent(mi) == agent]
@@ -125,6 +139,8 @@ def retrieve_by_agent(
         return retrieve_topk(filt, query, int(now_unix), **kwargs)
 
     return retrieve_topk(filt, query, int(now_unix))
+
+
 def merge_global(per_agent_lists: Iterable[list], top_k: int = 8) -> list:
     """
     Merge multiple per-agent retrieval lists into a single deterministic ranked list.
@@ -138,18 +154,27 @@ def merge_global(per_agent_lists: Iterable[list], top_k: int = 8) -> list:
     def score_of(x):
         if isinstance(x, dict):
             return float(x.get("score_global") or x.get("score") or 0.0)
-        return float(getattr(x, "score_global", None) or getattr(x, "score", 0.0) or 0.0)
+        return float(
+            getattr(x, "score_global", None) or getattr(x, "score", 0.0) or 0.0
+        )
 
     ranked = sorted(
         merged,
         key=lambda x: (
             -score_of(x),
-            (x.get("stable_id") if isinstance(x, dict) else getattr(x, "stable_id", 10**18)),
+            (
+                x.get("stable_id")
+                if isinstance(x, dict)
+                else getattr(x, "stable_id", 10**18)
+            ),
         ),
     )
     return ranked[:top_k]
 
-def build_mini_inputs(retrieved: list, max_sentences: int = 4, max_chars: int = 240) -> list:
+
+def build_mini_inputs(
+    retrieved: list, max_sentences: int = 4, max_chars: int = 240
+) -> list:
     """
     Extract-first: build minimal inputs (key sentences) from retrieved items deterministically.
     Returns list of dicts: {stable_id, agent, source_block_ids, key_sentences, scores}
@@ -169,7 +194,9 @@ def build_mini_inputs(retrieved: list, max_sentences: int = 4, max_chars: int = 
             stable_id = getattr(it, "stable_id", None)
             block_id = getattr(it, "block_id", None) or getattr(it, "id", None)
             scores = getattr(it, "scores", None) or {}
-            score_global = getattr(it, "score_global", None) or getattr(it, "score", None)
+            score_global = getattr(it, "score_global", None) or getattr(
+                it, "score", None
+            )
 
         # Simple deterministic sentence split (no regex heavy)
         parts = [p.strip() for p in text.replace("\r", "\n").split("\n") if p.strip()]
@@ -190,12 +217,13 @@ def build_mini_inputs(retrieved: list, max_sentences: int = 4, max_chars: int = 
             except Exception:
                 pass
 
-        out.append({
-            "stable_id": stable_id,
-            "agent": agent,
-            "source_block_ids": [block_id] if block_id else [],
-            "key_sentences": key_sent,
-            "scores": scores,
-        })
+        out.append(
+            {
+                "stable_id": stable_id,
+                "agent": agent,
+                "source_block_ids": [block_id] if block_id else [],
+                "key_sentences": key_sent,
+                "scores": scores,
+            }
+        )
     return out
-

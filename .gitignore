@@ -17,3 +17,5 @@ dmr_faiss_hot/
 dmr_doctor_report.json
 dmr_doctor_report.md
 DMR_COMPLIANCE_CERT.md
+doctor_cold.sqlite3
+tests/fixtures/golden/router_v1.0.0/fuser_fallback.txt

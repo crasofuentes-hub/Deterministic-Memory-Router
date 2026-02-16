@@ -41,6 +41,7 @@ def _redis_try(redis_url: str) -> redis.Redis:
 
 class NullHotStorage:
     """Hot storage stub that satisfies retrieval.py when Redis is unavailable."""
+
     def idxmap_mget(self, user_key: str, indices: Sequence[int]) -> List[str]:
         return []
 
@@ -77,6 +78,7 @@ def run_doctor(
 
     try:
         import faiss  # type: ignore
+
         env["faiss"] = getattr(faiss, "__version__", "unknown")
     except Exception:
         env["faiss"] = "not_installed"
@@ -92,7 +94,10 @@ def run_doctor(
             CheckResult(
                 "redis_hot_available",
                 (False if strict else True),
-                {"error": str(e), "mode": ("strict" if strict else "degraded_no_redis")},
+                {
+                    "error": str(e),
+                    "mode": ("strict" if strict else "degraded_no_redis"),
+                },
             )
         )
         r = None
@@ -138,7 +143,13 @@ def run_doctor(
             text = f"Human: pref_{i}=val_{i}\nAI: ok"
             v = vectorizer.text_to_vector(text).astype(np.float32)
             hot_index.add(user_key, v, persist=False)
-            hot.put_turn(user_key, f"h{i}", text, sha256_hex(f"{user_key}|h{i}|{text}")[:16], now + i)
+            hot.put_turn(
+                user_key,
+                f"h{i}",
+                text,
+                sha256_hex(f"{user_key}|h{i}|{text}")[:16],
+                now + i,
+            )
 
         hot_index.persist(user_key)
         hot_storage = hot
@@ -151,9 +162,9 @@ def run_doctor(
     ev1 = retriever.retrieve(tenant_id, user_id, q)
     ev2 = retriever.retrieve(tenant_id, user_id, q)
 
-    same_evidence = [(e.turn_id, e.signature, round(e.score, 6), e.source) for e in ev1] == [
-        (e.turn_id, e.signature, round(e.score, 6), e.source) for e in ev2
-    ]
+    same_evidence = [
+        (e.turn_id, e.signature, round(e.score, 6), e.source) for e in ev1
+    ] == [(e.turn_id, e.signature, round(e.score, 6), e.source) for e in ev2]
 
     pol = retriever.policy
     pol_dict = {
@@ -164,8 +175,20 @@ def run_doctor(
         "budget_ms_cold": pol.budget_ms_cold,
     }
 
-    s1 = pack_signature(tenant_id, user_id, q, pol_dict, [(e.turn_id, e.signature, e.score, e.source) for e in ev1])
-    s2 = pack_signature(tenant_id, user_id, q, pol_dict, [(e.turn_id, e.signature, e.score, e.source) for e in ev2])
+    s1 = pack_signature(
+        tenant_id,
+        user_id,
+        q,
+        pol_dict,
+        [(e.turn_id, e.signature, e.score, e.source) for e in ev1],
+    )
+    s2 = pack_signature(
+        tenant_id,
+        user_id,
+        q,
+        pol_dict,
+        [(e.turn_id, e.signature, e.score, e.source) for e in ev2],
+    )
 
     checks.append(
         CheckResult(
@@ -191,17 +214,29 @@ def run_doctor(
     )
 
     has_cold = any(e.source == "cold" for e in ev1)
-    checks.append(CheckResult("cold_storage_consultable", bool(has_cold), {"cold_hits": sum(1 for e in ev1 if e.source == "cold")}))
+    checks.append(
+        CheckResult(
+            "cold_storage_consultable",
+            bool(has_cold),
+            {"cold_hits": sum(1 for e in ev1 if e.source == "cold")},
+        )
+    )
 
     ok_all = all(c.ok for c in checks)
-    summary = {"dmr_version": "2026.0.2", "timestamp_utc": _now_iso(), "ok": bool(ok_all)}
+    summary = {
+        "dmr_version": "2026.0.2",
+        "timestamp_utc": _now_iso(),
+        "ok": bool(ok_all),
+    }
 
     canonical = {
         "summary": summary,
         "environment": env,
         "checks": [{"name": c.name, "ok": c.ok, "details": c.details} for c in checks],
     }
-    blob = json.dumps(canonical, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
+    blob = json.dumps(
+        canonical, sort_keys=True, separators=(",", ":"), ensure_ascii=False
+    )
     summary["report_signature"] = sha256_hex(blob)[:16]
 
     report = {
@@ -211,7 +246,19 @@ def run_doctor(
     }
 
     _write(report_out, json.dumps(report, indent=2, ensure_ascii=False))
-    _write(report_md, "# DMR Doctor Report\n\n```json\n" + json.dumps(report, indent=2, ensure_ascii=False) + "\n```\n")
-    _write(cert_md, "# DMR Compliance Certificate\n\n- Overall: " + ("PASS" if ok_all else "FAIL") + "\n- Signature: `" + summary["report_signature"] + "`\n")
+    _write(
+        report_md,
+        "# DMR Doctor Report\n\n```json\n"
+        + json.dumps(report, indent=2, ensure_ascii=False)
+        + "\n```\n",
+    )
+    _write(
+        cert_md,
+        "# DMR Compliance Certificate\n\n- Overall: "
+        + ("PASS" if ok_all else "FAIL")
+        + "\n- Signature: `"
+        + summary["report_signature"]
+        + "`\n",
+    )
 
     return 0 if ok_all else (1 if strict else 0)

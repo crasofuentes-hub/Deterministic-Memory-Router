@@ -4,10 +4,12 @@ import re
 
 _ws = re.compile(r"\s+")
 
+
 def _simple_token_count(text: str) -> int:
     if not text:
         return 0
     return len([t for t in _ws.split(text.strip()) if t])
+
 
 def _clip_to_tokens(text: str, max_tokens: int) -> str:
     if not text:

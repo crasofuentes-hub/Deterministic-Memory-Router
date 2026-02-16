@@ -11,6 +11,7 @@ from .budgets import Budgets, Thresholds
 from .faiss_store import FaissShard, MemoryChunk, Retrieved
 from .tokens import _clip_to_tokens, _simple_token_count
 
+
 class DeterministicFusion:
     """
     Deterministic fusion:
@@ -78,7 +79,9 @@ class MultiAgentMemorySystem:
         self.model = SentenceTransformer(model_name)
         dim = int(self.model.get_sentence_embedding_dimension())
 
-        self.shards: Dict[str, FaissShard] = {a: FaissShard(store_dir, a, dim) for a in self.agents}
+        self.shards: Dict[str, FaissShard] = {
+            a: FaissShard(store_dir, a, dim) for a in self.agents
+        }
         for s in self.shards.values():
             s.load()
 
@@ -98,10 +101,14 @@ class MultiAgentMemorySystem:
         meta: Optional[Dict[str, Any]] = None,
     ) -> None:
         agent = self._agent_for_turn(turn_index_1based)
-        turn_start = ((turn_index_1based - 1) // self.turns_per_agent) * self.turns_per_agent + 1
+        turn_start = (
+            (turn_index_1based - 1) // self.turns_per_agent
+        ) * self.turns_per_agent + 1
         turn_end = turn_start + self.turns_per_agent - 1
 
-        emb = self.model.encode([text], convert_to_numpy=True, normalize_embeddings=True).astype(np.float32)
+        emb = self.model.encode(
+            [text], convert_to_numpy=True, normalize_embeddings=True
+        ).astype(np.float32)
 
         m = dict(meta or {})
         # IMPORTANT: include turn_end for "newest wins" at query-time
@@ -126,12 +133,18 @@ class MultiAgentMemorySystem:
     def _summarize_agent(self, retrieved: List[Retrieved]) -> str:
         if not retrieved:
             return ""
-        retrieved = sorted(retrieved, key=lambda r: (r.score, r.ts_unix, -r.stable_id), reverse=True)
-        joined = "\n".join([r.text.strip() for r in retrieved if (r.text or "").strip()])
+        retrieved = sorted(
+            retrieved, key=lambda r: (r.score, r.ts_unix, -r.stable_id), reverse=True
+        )
+        joined = "\n".join(
+            [r.text.strip() for r in retrieved if (r.text or "").strip()]
+        )
         return _clip_to_tokens(joined, self.budgets.max_agent_summary_tokens)
 
     def query(self, text: str, now_unix: int) -> Dict[str, Any]:
-        q = self.model.encode([text], convert_to_numpy=True, normalize_embeddings=True).astype(np.float32)
+        q = self.model.encode(
+            [text], convert_to_numpy=True, normalize_embeddings=True
+        ).astype(np.float32)
 
         per_agent: List[Dict[str, Any]] = []
         summaries_for_fuse: List[Tuple[str, float, int, str]] = []
@@ -148,7 +161,9 @@ class MultiAgentMemorySystem:
             passed = bool(best >= float(self.thresholds.similarity_gate))
             if passed:
                 summary = self._summarize_agent(got)
-                summaries_for_fuse.append((agent, float(best), int(newest_turn_end), summary))
+                summaries_for_fuse.append(
+                    (agent, float(best), int(newest_turn_end), summary)
+                )
 
             per_agent.append(
                 {

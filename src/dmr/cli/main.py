@@ -3,11 +3,17 @@ import argparse
 import sys
 from dmr.cli.doctor import run_doctor
 
+
 def build_parser() -> argparse.ArgumentParser:
-    p = argparse.ArgumentParser(prog="dmr", description="DMR vFinal 2026 - Enterprise CLI")
+    p = argparse.ArgumentParser(
+        prog="dmr", description="DMR vFinal 2026 - Enterprise CLI"
+    )
     sub = p.add_subparsers(dest="cmd", required=True)
 
-    d = sub.add_parser("doctor", help="Run determinism/offline/no-saturation checks and emit signed report + cert")
+    d = sub.add_parser(
+        "doctor",
+        help="Run determinism/offline/no-saturation checks and emit signed report + cert",
+    )
     d.add_argument("--redis-url", default="redis://localhost:6379/0")
     d.add_argument("--cold-sqlite", default="./dmr_cold.sqlite3")
     d.add_argument("--faiss-dir", default="./dmr_faiss_hot")
@@ -20,6 +26,7 @@ def build_parser() -> argparse.ArgumentParser:
     d.add_argument("--runs", type=int, default=50)
     d.add_argument("--strict", action="store_true")
     return p
+
 
 def main(argv: list[str] | None = None) -> int:
     if argv is None:

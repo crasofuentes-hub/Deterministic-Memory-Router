@@ -51,7 +51,9 @@ def _route_labels(labels: List[Any], thr: float) -> List[Dict[str, Any]]:
     return out
 
 
-def _call_retrieve_topk(items: List[Any], query: str, topk: int, now_unix: int) -> List[Any]:
+def _call_retrieve_topk(
+    items: List[Any], query: str, topk: int, now_unix: int
+) -> List[Any]:
     """
     Llama retrieve_topk sin asumir firma exacta.
     Soporta topk/top_k y now_unix/now.
@@ -170,17 +172,38 @@ def run_offline(
     mini_summaries: List[Dict[str, Any]] = []
     for idx, it in enumerate(global_ranked, start=1):
         # best-effort para extraer campos
-        agent = getattr(it, "agent", None) if not isinstance(it, dict) else it.get("agent", "conversation")
-        stable_id = getattr(it, "stable_id", idx) if not isinstance(it, dict) else it.get("stable_id", idx)
-        meta = getattr(it, "meta", {}) if not isinstance(it, dict) else it.get("meta", {})
+        agent = (
+            getattr(it, "agent", None)
+            if not isinstance(it, dict)
+            else it.get("agent", "conversation")
+        )
+        stable_id = (
+            getattr(it, "stable_id", idx)
+            if not isinstance(it, dict)
+            else it.get("stable_id", idx)
+        )
+        meta = (
+            getattr(it, "meta", {}) if not isinstance(it, dict) else it.get("meta", {})
+        )
         block_id = meta.get("block_id", f"b{idx:03d}")
 
-        text = getattr(it, "text", "") if not isinstance(it, dict) else it.get("text", "")
+        text = (
+            getattr(it, "text", "") if not isinstance(it, dict) else it.get("text", "")
+        )
         key_sentences = [text[:200]] if text else [""]
 
-        scores = getattr(it, "scores", None) if not isinstance(it, dict) else it.get("scores")
+        scores = (
+            getattr(it, "scores", None)
+            if not isinstance(it, dict)
+            else it.get("scores")
+        )
         if not isinstance(scores, dict):
-            scores = {"match_query": 0.0, "recency": 0.0, "priority": 0.0, "score_global": 0.0}
+            scores = {
+                "match_query": 0.0,
+                "recency": 0.0,
+                "priority": 0.0,
+                "score_global": 0.0,
+            }
 
         ms = make_mini_summary(
             agent=str(agent or "conversation"),
@@ -222,7 +245,9 @@ def run_offline(
     manifest_path = out_dir / "run_manifest.json"
 
     if mode == "generate":
-        manifest_path.write_text(json.dumps(manifest, indent=2, ensure_ascii=False), encoding="utf-8")
+        manifest_path.write_text(
+            json.dumps(manifest, indent=2, ensure_ascii=False), encoding="utf-8"
+        )
         (out_dir / "classifier_items.json").write_text(
             json.dumps(classifier_items, indent=2, ensure_ascii=False), encoding="utf-8"
         )
@@ -234,10 +259,13 @@ def run_offline(
         )
         if fused_ok:
             (out_dir / "fuser_output.json").write_text(
-                json.dumps(fused_payload, indent=2, ensure_ascii=False), encoding="utf-8"
+                json.dumps(fused_payload, indent=2, ensure_ascii=False),
+                encoding="utf-8",
             )
         else:
-            (out_dir / "fuser_fallback.txt").write_text(fused_text_fallback, encoding="utf-8")
+            (out_dir / "fuser_fallback.txt").write_text(
+                fused_text_fallback, encoding="utf-8"
+            )
 
     elif mode == "check":
         expected = json.loads(manifest_path.read_text(encoding="utf-8"))
@@ -255,8 +283,10 @@ def run_offline(
 
     # --- test-compat aliases (legacy keys expected by tests) ---
     manifest["items_count"] = int(manifest.get("counts", {}).get("global_ranked", 0))
-    manifest["items_hash"]  = str(manifest.get("hashes", {}).get("global_ranked", ""))
+    manifest["items_hash"] = str(manifest.get("hashes", {}).get("global_ranked", ""))
     return manifest
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--corpus", required=True)

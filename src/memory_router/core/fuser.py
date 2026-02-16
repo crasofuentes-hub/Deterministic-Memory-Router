@@ -3,6 +3,7 @@ from typing import Dict, Any, List, Set
 from ..utils.schema_validator import SchemaRegistry
 from .validator import validate_fuser_output
 
+
 def fuse(
     mini_summaries: List[Dict[str, Any]],
     *,
@@ -36,7 +37,9 @@ def fuse(
                 pref_seen.add(p)
                 active_preferences.append({"pref": p[:120], "since": config_version})
         elif agent == "code":
-            relevant_code.append({"summary": summ[:160], "snippet_ref": f"code_block_{sid}"})
+            relevant_code.append(
+                {"summary": summ[:160], "snippet_ref": f"code_block_{sid}"}
+            )
         else:
             conversation_facts.append(summ[:180])
 

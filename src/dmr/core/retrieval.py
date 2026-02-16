@@ -1,4 +1,4 @@
-﻿from __future__ import annotations
+from __future__ import annotations
 
 from dataclasses import dataclass
 from typing import List, Optional, Sequence
@@ -106,7 +106,9 @@ class DeterministicRetriever:
         except Exception:
             return []
 
-    def _retrieve_cold(self, tenant_id: str, user_id: str, query: str) -> List[EvidenceItem]:
+    def _retrieve_cold(
+        self, tenant_id: str, user_id: str, query: str
+    ) -> List[EvidenceItem]:
         rows: List[ColdRow] = self.cold_store.search_fts(
             tenant_id,
             user_id,

@@ -1,7 +1,14 @@
 from __future__ import annotations
 from typing import Dict, Any, List
 
-SECTION_ORDER = ("active_preferences", "preferences_history", "relevant_code", "conversation_facts", "notes")
+SECTION_ORDER = (
+    "active_preferences",
+    "preferences_history",
+    "relevant_code",
+    "conversation_facts",
+    "notes",
+)
+
 
 def fallback_from_mini(mini_summaries: List[Dict[str, Any]]) -> str:
     prefs = []

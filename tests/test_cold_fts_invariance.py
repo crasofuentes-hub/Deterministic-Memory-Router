@@ -3,6 +3,7 @@ import time
 from pathlib import Path
 from dmr.storage.cold_sqlite import SQLiteColdStore, ColdRow
 
+
 def test_cold_fts_invariance(tmp_path: Path):
     db = SQLiteColdStore(path=str(tmp_path / "cold.sqlite3"))
     tenant, user = "T", "U"

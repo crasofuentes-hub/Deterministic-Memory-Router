@@ -58,7 +58,9 @@ class SQLiteColdStore:
 
             # Migration: add ts if missing
             if not self._has_column(con, "cold_rows", "ts"):
-                con.execute("ALTER TABLE cold_rows ADD COLUMN ts REAL NOT NULL DEFAULT 0;")
+                con.execute(
+                    "ALTER TABLE cold_rows ADD COLUMN ts REAL NOT NULL DEFAULT 0;"
+                )
 
             # Standalone FTS (NOT external content) => avoids missing-row issues
             con.execute(
@@ -77,7 +79,9 @@ class SQLiteColdStore:
             )
 
             con.execute("DROP INDEX IF EXISTS cold_rows_tut;")
-            con.execute("CREATE INDEX IF NOT EXISTS cold_rows_tut ON cold_rows(tenant_id, user_id, ts);")
+            con.execute(
+                "CREATE INDEX IF NOT EXISTS cold_rows_tut ON cold_rows(tenant_id, user_id, ts);"
+            )
             con.commit()
 
     def put_many(self, rows: Iterable[ColdRow]) -> None:
@@ -94,7 +98,17 @@ class SQLiteColdStore:
                 INSERT OR REPLACE INTO cold_rows(tenant_id,user_id,turn_id,signature,ts,text)
                 VALUES(?,?,?,?,?,?);
                 """,
-                [(r.tenant_id, r.user_id, r.turn_id, r.signature, float(r.ts), r.text) for r in rows_list],
+                [
+                    (
+                        r.tenant_id,
+                        r.user_id,
+                        r.turn_id,
+                        r.signature,
+                        float(r.ts),
+                        r.text,
+                    )
+                    for r in rows_list
+                ],
             )
 
             for r in rows_list:
@@ -107,7 +121,14 @@ class SQLiteColdStore:
                     INSERT INTO cold_fts(tenant_id,user_id,turn_id,signature,ts,text)
                     VALUES(?,?,?,?,?,?);
                     """,
-                    (r.tenant_id, r.user_id, r.turn_id, r.signature, float(r.ts), r.text),
+                    (
+                        r.tenant_id,
+                        r.user_id,
+                        r.turn_id,
+                        r.signature,
+                        float(r.ts),
+                        r.text,
+                    ),
                 )
 
             cur.execute("COMMIT;")
@@ -154,14 +175,28 @@ class SQLiteColdStore:
                 for row in cur.fetchall():
                     if (time.perf_counter() - t0) * 1000.0 > float(budget_ms):
                         break
-                    out.append(ColdRow(row[0], row[1], row[2], row[3], float(row[4]), row[5], float(row[6])))
+                    out.append(
+                        ColdRow(
+                            row[0],
+                            row[1],
+                            row[2],
+                            row[3],
+                            float(row[4]),
+                            row[5],
+                            float(row[6]),
+                        )
+                    )
                 return out
             except sqlite3.DatabaseError as e:
                 msg = str(e).lower()
-                if _retry and ("fts5:" in msg or "cold_fts" in msg or "missing row" in msg):
+                if _retry and (
+                    "fts5:" in msg or "cold_fts" in msg or "missing row" in msg
+                ):
                     pass
                 else:
                     raise
 
         self.repair_fts()
-        return self.search_fts(tenant_id, user_id, query, limit=limit, budget_ms=budget_ms, _retry=False)
+        return self.search_fts(
+            tenant_id, user_id, query, limit=limit, budget_ms=budget_ms, _retry=False
+        )
