@@ -1,11 +1,21 @@
-{
-  "inputs": [
-    "Hola. Todo bien.",
-    "Estoy ansioso...",
-    "Ã‚Â¡QuÃƒÂ© bueno!",
-    "No sÃƒÂ© quÃƒÂ© pasa.",
-    "Otra vez igual."
-  ],
-  $190b2c96cdee18810fdde924df6ea65e18795975830aadee61005007582232355"
+﻿{
+    "schema":  "v1",
+    "hash":  "ef5c338dfb0691f89ad78e8046142179a70fd6685890e39c4e81c07e0c00baa9",
+    "items":  [
+                  {
+                      "text":  "Hola. Todo bien."
+                  },
+                  {
+                      "text":  "Estoy ansioso..."
+                  },
+                  {
+                      "text":  "Ãƒâ€šÃ‚Â¡QuÃƒÆ’Ã‚Â© bueno!"
+                  },
+                  {
+                      "text":  "No sÃƒÆ’Ã‚Â© quÃƒÆ’Ã‚Â© pasa."
+                  },
+                  {
+                      "text":  "Otra vez igual."
+                  }
+              ]
 }
-
