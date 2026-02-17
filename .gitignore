@@ -23,3 +23,7 @@ tests/fixtures/golden/router_v1.0.0/fuser_fallback.txt
 # local backup artifacts
 emotional-state-tracker/data/*.bak
 
+
+# backup artifacts
+emotional-state-tracker/data/*.bak
+
