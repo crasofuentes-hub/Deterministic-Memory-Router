@@ -19,6 +19,7 @@ class EmotionalTracker:
     Offline + deterministic.
     Stores per-user history: sha256(text) -> vector
     """
+
     def __init__(self) -> None:
         self.states_by_user: dict[str, dict[str, np.ndarray]] = {}
 
