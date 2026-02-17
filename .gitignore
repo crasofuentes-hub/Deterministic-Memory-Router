@@ -19,3 +19,7 @@ dmr_doctor_report.md
 DMR_COMPLIANCE_CERT.md
 doctor_cold.sqlite3
 tests/fixtures/golden/router_v1.0.0/fuser_fallback.txt
+
+# local backup artifacts
+emotional-state-tracker/data/*.bak
+
