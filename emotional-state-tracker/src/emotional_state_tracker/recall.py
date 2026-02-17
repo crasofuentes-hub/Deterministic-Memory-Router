@@ -26,5 +26,5 @@ def recall_emotion(
             similar += 1
 
     if similar > 0:
-        return f"Recuerdo: {similar} estados parecidos. Mantén el tono."
-    return "Nuevo patrón. Sigo normal."
+        return f"Recuerdo: {similar} estados parecidos. MantÃ©n el tono."
+    return "Nuevo patrÃ³n. Sigo normal."
