@@ -1,3 +1,12 @@
+import sys
+from pathlib import Path
+
+# Make monorepo package importable when running this script directly.
+# Adds: <repo>/emotional-state-tracker/src to sys.path
+_THIS = Path(__file__).resolve()
+_SRC = _THIS.parents[1] / "src"
+if str(_SRC) not in sys.path:
+    sys.path.insert(0, str(_SRC))
 from __future__ import annotations
 
 import hashlib
@@ -17,7 +26,7 @@ def _stable_digest(tracker: EmotionalTracker, user_id: str = "default") -> str:
 
 def main() -> None:
     data_path = Path("data") / "golden_emotions.json"
-    golden = json.loads(data_path.read_text(encoding="utf-8"))
+    golden = json.loads(data_path.read_text(encoding="utf-8-sig"))
 
     inputs = golden["inputs"]
     expected = golden["hash"]
@@ -30,7 +39,7 @@ def main() -> None:
     if got != expected:
         raise SystemExit(f"Estado roto: expected={expected} got={got}")
 
-    print("✓ Determinista emocional")
+    print("âœ“ Determinista emocional")
 
 
 if __name__ == "__main__":
